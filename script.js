@@ -1,4 +1,4 @@
-const WEBHOOK = "https://discord.com/api/webhooks/1490805370715902075/gRPIwEEgi3c5kSyGOO79wDtEjBgy-wzirW1hU-K27YZnavOqki447luH-mQn-UNhWOj9";
+const WEBHOOK = "https://discord.com/api/webhooks/1519802126702870538/CYb3oDCu2KEis8Kdo47Fu6ALmakjO1zsmuY5FgS_9jcCyjw_VMK-Ecz9glv5s-MSJSRk";
 console.log("script chargé");
 // Créer les particules d'arrière-plan
 function createParticles() {
